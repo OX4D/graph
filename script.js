@@ -1,17 +1,17 @@
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: ['11:50:00', '11:50:10', '11:50:20', '11:50:30', '11:50:40', '11:50:50', '11:51:00', '11:51:10', '11:51:20', '11:51:30', '11:51:40', '11:51:50'],
+        labels: [], // Пустой массив для меток
         datasets: [{
             label: 'Модем 1',
-            data: [65, 59, 80, 81, 56, 55, 40, 60, 70, 80, 90, 100],
+            data: [], // Пустой массив для данных
             fill: false,
             borderColor: 'blue',
             tension: 0.1
         }, {
             label: 'Модем 2',
-            data: [85, 69, 70, 61, 76, 65, 80, 70, 90, 100, 110, 120],
+            data: [], // Пустой массив для данных
             fill: false,
             borderColor: 'red',
             tension: 0.1
@@ -34,3 +34,29 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+
+// Функция для получения случайного значения (для демонстрации)
+function getRandomValue() {
+    return Math.floor(Math.random() * 100);
+}
+
+// Функция для добавления новых данных в график
+function addData(chart, label, data1, data2) {
+    if (chart.data.labels.length > 10) {
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+        chart.data.datasets[1].data.shift();
+    }
+
+    chart.data.labels.push(label);
+    chart.data.datasets[0].data.push(data1);
+    chart.data.datasets[1].data.push(data2);
+    chart.update();
+}
+
+// Обновление графика каждую секунду
+setInterval(() => {
+    const now = new Date();
+    const timeLabel = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+    addData(myChart, timeLabel, getRandomValue(), getRandomValue());
+}, 1000);
