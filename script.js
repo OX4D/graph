@@ -8,13 +8,17 @@ const myChart = new Chart(ctx, {
             data: [], // Пустой массив для данных
             fill: false,
             borderColor: 'blue',
-            tension: 0.1
+            borderWidth: 1, // Тонкие линии
+            tension: 0.3,
+            pointRadius: 0.1 // Меньшие точки
         }, {
             label: 'Модем 2',
             data: [], // Пустой массив для данных
             fill: false,
             borderColor: 'red',
-            tension: 0.1
+            borderWidth: 1, // Тонкие линии
+            tension: 0.3,
+            pointRadius: 0.1 // Меньшие точки
         }]
     },
     options: {
@@ -42,7 +46,7 @@ function getRandomValue() {
 
 // Функция для добавления новых данных в график
 function addData(chart, label, data1, data2) {
-    if (chart.data.labels.length > 10) {
+    if (chart.data.labels.length > 50) {
         chart.data.labels.shift();
         chart.data.datasets[0].data.shift();
         chart.data.datasets[1].data.shift();
@@ -54,9 +58,19 @@ function addData(chart, label, data1, data2) {
     chart.update();
 }
 
-// Обновление графика каждую секунду
+// Обновление графика каждые 500 миллисекунд (0.5 секунды)
 setInterval(() => {
     const now = new Date();
     const timeLabel = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
     addData(myChart, timeLabel, getRandomValue(), getRandomValue());
+
+    // Удаление старых данных, если количество точек превышает 20
+    if (myChart.data.labels.length > 20) {
+        myChart.data.labels.shift();
+        myChart.data.datasets.forEach((dataset) => {
+            dataset.data.shift();
+        });
+    }
+
+    myChart.update();
 }, 1000);
