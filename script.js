@@ -6,37 +6,42 @@ const myChart = new Chart(ctx, {
         datasets: [{
             label: 'Модем 1',
             data: [], // Пустой массив для данных
-            fill: false,
+            fill: true,
             borderColor: 'blue',
+            backgroundColor: 'rgba(0, 0, 255, 0.1)',
             borderWidth: 1, // Тонкие линии
             tension: 0.3,
-            pointRadius: 0.1 // Меньшие точки
+            pointRadius: 1 // Меньшие точки
         }, {
             label: 'Модем 2',
             data: [], // Пустой массив для данных
-            fill: false,
+            fill: true,
             borderColor: 'red',
+            backgroundColor: 'rgba(255, 0, 0, 0.1)',
             borderWidth: 1, // Тонкие линии
             tension: 0.3,
-            pointRadius: 0.1 // Меньшие точки
+            pointRadius: 1 // Меньшие точки
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: false,
-                title: {
-                    display: true,
-                    text: 'Mb'
+        tooltips: {
+            enabled: true,
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    let label = data.datasets[tooltipItem.datasetIndex].label || '';
+                    if (label) {
+                        label += ': ';
+                    }
+                    label += Math.round(tooltipItem.yLabel * 100) / 100;
+                    return label;
                 }
             }
         },
-        legend: {
-            labels: {
-                usePointStyle: true,
-            }
-        }
+        // Другие настройки...
     }
+    
 });
 
 // Функция для получения случайного значения (для демонстрации)
@@ -58,7 +63,7 @@ function addData(chart, label, data1, data2) {
     chart.update();
 }
 
-// Обновление графика каждые 500 миллисекунд (0.5 секунды)
+// Обновление графика каждые 500 миллисекунд для более частого обновления
 setInterval(() => {
     const now = new Date();
     const timeLabel = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
@@ -72,5 +77,7 @@ setInterval(() => {
         });
     }
 
-    myChart.update();
-}, 1000);
+    myChart.update({
+        preservation: true
+    });
+}, 1000); // Изменено с 1000 на 500 мс для более быстрого обновления
