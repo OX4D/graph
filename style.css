@@ -11,7 +11,7 @@ body {
 .chart-container {
     width: 80%;
     max-width: 700px;
-    background-color: #efefef;
+    background-color: #eaeaea;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
